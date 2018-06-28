@@ -1,0 +1,72 @@
+//---------------------------------------------------------------------------
+
+#ifndef OPCMapH
+#define OPCMapH
+//---------------------------------------------------------------------------
+#endif
+
+#include "sensor.h"
+
+
+#define DISCRTTAGS      8
+#define ANALOGTAGS      8
+#define TAGSMAPVAL      2000
+
+
+//Структура группового пакета для передачи данных одного датчика по OPC
+
+typedef struct {
+
+//указатель на датчик
+ TBTSensor* S;
+
+ //Данные по слову состояния к началу секунды
+ int DTags[DISCRTTAGS];
+ //Данные по углам и ускорениям к началу секунды
+ int ATags[ANALOGTAGS];
+
+/*
+//Время начала формирования пакета
+ DWORD StrtTime;
+//Время окончания формирования пакета
+ DWORD StopTime;
+
+//Количество записей по ускорениям X Y
+ int AXYidx;
+
+//Массив значений ускорений за всю секунду по X
+ int AXTags[200];
+//Массив значений ускорений за всю секунду по Y
+ int AYTags[200];
+*/
+
+
+} SensOPCMap;
+
+class TSensOPCMap {
+
+ public:
+
+ __fastcall TSensOPCMap();
+ __fastcall ~TSensOPCMap();
+ 
+ private:
+ SensOPCMap* TagsMap[TAGSMAPVAL];
+
+
+ public:
+ int gDiscrtTagNum;
+ int gAnalogTagNum;
+
+ int gTagsMapVal;
+
+ public:
+
+ int AddSensMap(TBTSensor* s);
+
+// TStrings* SetValues();
+
+void SetValues(TStrings* res);
+
+};
+

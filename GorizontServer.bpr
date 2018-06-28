@@ -1,0 +1,189 @@
+<?xml version='1.0' encoding='utf-8' ?>
+<!-- C++Builder XML Project -->
+<PROJECT>
+  <MACROS>
+    <VERSION value="BCB.06.00"/>
+    <PROJECT value="GorizontServer.exe"/>
+    <OBJFILES value="work\GorizontServer.obj work\Main.obj work\BTPorts.obj work\BS4I1Thr.obj 
+      work\Sensor.obj work\Proc.obj work\ChartDlg.obj work\Unit1.obj 
+      work\Unit2.obj work\Unit_AND3Tune.obj work\BTCOM.obj work\BS4I1Def.obj 
+      work\Protocol_211.obj work\Unit_accmeas.obj work\OPCU.obj work\ConfigU.obj 
+      work\OPCMap.obj work\Unit3.obj work\TuneSystem.obj work\About.obj 
+      work\TunePort.obj work\TuneSensor.obj work\MonSysPar.obj 
+      work\SysConfMaster.obj work\TuneDataProc.obj work\TuneInterfaces.obj 
+      work\Unit_enter_password.obj"/>
+    <RESFILES value="GorizontServer.res"/>
+    <IDLFILES value=""/>
+    <IDLGENFILES value=""/>
+    <DEFFILE value=""/>
+    <RESDEPEN value="$(RESFILES) Main.dfm ChartDlg.dfm Unit1.dfm Unit2.dfm Unit_AND3Tune.dfm 
+      UTILS\Unit_accmeas.dfm Unit3.dfm TuneSystem.dfm About.dfm TunePort.dfm 
+      TuneSensor.dfm TuneDataProc.dfm TuneInterfaces.dfm Unit_enter_password.dfm"/>
+    <LIBFILES value="..\LIB_UTILS\lib_utils.lib ..\OPCGate_lib\OPCGate.lib 
+      ..\IndyStatSSL\IndyStatSSL.lib ..\OPENSSL-0.9.7M-INDY\out32\libeay32.lib 
+      ..\OPENSSL-0.9.7M-INDY\out32\ssleay32.lib"/>
+    <LIBRARIES value="indy.lib tee.lib vclx.lib bcbsmp.lib rtl.lib vcl.lib"/>
+    <SPARELIBS value="vcl.lib rtl.lib bcbsmp.lib vclx.lib tee.lib indy.lib"/>
+    <PACKAGES value="vcl.bpi rtl.bpi dbrtl.bpi adortl.bpi vcldb.bpi vclx.bpi bdertl.bpi 
+      vcldbx.bpi ibxpress.bpi dsnap.bpi cds.bpi bdecds.bpi qrpt.bpi teeui.bpi 
+      teedb.bpi tee.bpi dss.bpi teeqr.bpi visualclx.bpi visualdbclx.bpi 
+      dsnapcrba.bpi dsnapcon.bpi bcbsmp.bpi vclie.bpi xmlrtl.bpi inet.bpi 
+      inetdbbde.bpi inetdbxpress.bpi inetdb.bpi nmfast.bpi webdsnap.bpi 
+      bcbie.bpi websnap.bpi soaprtl.bpi dclocx.bpi dbexpress.bpi dbxcds.bpi 
+      indy.bpi bcb2kaxserver.bpi Yuri.bpi"/>
+    <PATHCPP value=".;UTILS;UTILS;UTILS;UTILS"/>
+    <PATHPAS value=".;"/>
+    <PATHRC value=".;"/>
+    <PATHASM value=".;"/>
+    <DEBUGLIBPATH value="$(BCB)\lib\debug"/>
+    <RELEASELIBPATH value="$(BCB)\lib\release"/>
+    <LINKER value="ilink32"/>
+    <USERDEFINES value=""/>
+    <SYSDEFINES value="NO_STRICT"/>
+    <MAINSOURCE value="GorizontServer.cpp"/>
+    <INCLUDEPATH value="&quot;C:\Program Files (x86)\Borland\CBuilder6\Projects&quot;;..;UTILS;and3_embedded;$(BCB)\include;$(BCB)\include\vcl;..\OPCGate_lib;..\IndyStatSSL;..\lib_utils"/>
+    <LIBPATH value="UTILS;$(BCB)\Projects\Lib;$(BCB)\lib\obj;$(BCB)\lib;$(BCB)\Projects"/>
+    <WARNINGS value="-w-par"/>
+    <OTHERFILES value=""/>
+  </MACROS>
+  <OPTIONS>
+    <IDLCFLAGS value="-I&quot;C:\Program Files (x86)\Borland\CBuilder6\Projects&quot; -I.. -IUTILS 
+      -Iand3_embedded -I$(BCB)\include -I$(BCB)\include\vcl -I..\OPCGate_lib 
+      -I..\IndyStatSSL -I..\lib_utils -src_suffix cpp -boa"/>
+    <CFLAG1 value="-O2 -H=$(BCB)\lib\vcl60.csm -Hc -Vx -Ve -X- -a1 -b- -k- -vi -c -tW -tWM"/>
+    <PFLAGS value="-N2work -N0work -$Y- -$L- -$D- -$A8 -v -JPHNE -M"/>
+    <RFLAGS value=""/>
+    <AFLAGS value="/mx /w2 /zn"/>
+    <LFLAGS value="-Iwork -D&quot;&quot; -aa -Tpe -x -Gn"/>
+    <OTHERFILES value=""/>
+  </OPTIONS>
+  <LINKER>
+    <ALLOBJ value="c0w32.obj sysinit.obj $(OBJFILES)"/>
+    <ALLRES value="$(RESFILES)"/>
+    <ALLLIB value="$(LIBFILES) $(LIBRARIES) import32.lib cp32mt.lib"/>
+    <OTHERFILES value=""/>
+  </LINKER>
+  <FILELIST>
+      <FILE FILENAME="GorizontServer.cpp" FORMNAME="" UNITNAME="GorizontServer" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="Main.cpp" FORMNAME="FMain" UNITNAME="Main" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="BTPorts.cpp" FORMNAME="" UNITNAME="BTPorts.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="BTPorts.h" FORMNAME="" UNITNAME="BTPorts.h" CONTAINERID="" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="GorizontServer.res" FORMNAME="" UNITNAME="GorizontServer.res" CONTAINERID="ResTool" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="BS4I1Thr.cpp" FORMNAME="" UNITNAME="BS4I1Thr" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="Sensor.cpp" FORMNAME="" UNITNAME="Sensor" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="Menu.h" FORMNAME="" UNITNAME="Menu" CONTAINERID="" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="INI.h" FORMNAME="" UNITNAME="INI.h" CONTAINERID="" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="Update.h" FORMNAME="" UNITNAME="Update.h" CONTAINERID="" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="Proc.cpp" FORMNAME="" UNITNAME="Proc" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="ChartDlg.cpp" FORMNAME="FChartDlg" UNITNAME="ChartDlg" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="Unit1.cpp" FORMNAME="Form_IND3_Tune" UNITNAME="Unit1" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="Unit2.cpp" FORMNAME="Form_new_addr" UNITNAME="Unit2" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="Unit_AND3Tune.cpp" FORMNAME="Form_AND3_Tune" UNITNAME="Unit_AND3Tune" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="UTILS\BTCOM.cpp" FORMNAME="" UNITNAME="BTCOM" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="UTILS\BS4I1Def.cpp" FORMNAME="" UNITNAME="BS4I1Def" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="UTILS\Protocol_211.cpp" FORMNAME="" UNITNAME="Protocol_211" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="UTILS\Unit_accmeas.cpp" FORMNAME="Form_acceas" UNITNAME="Unit_accmeas" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="OPCU.cpp" FORMNAME="" UNITNAME="OPCU" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="ConfigU.cpp" FORMNAME="" UNITNAME="ConfigU" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\LIB_UTILS\lib_utils.lib" FORMNAME="" UNITNAME="lib_utils.lib" CONTAINERID="LibTool" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\OPCGate_lib\OPCGate.lib" FORMNAME="" UNITNAME="OPCGate.lib" CONTAINERID="LibTool" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\IndyStatSSL\IndyStatSSL.lib" FORMNAME="" UNITNAME="IndyStatSSL.lib" CONTAINERID="LibTool" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\OPENSSL-0.9.7M-INDY\out32\libeay32.lib" FORMNAME="" UNITNAME="libeay32.lib" CONTAINERID="LibTool" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\OPENSSL-0.9.7M-INDY\out32\ssleay32.lib" FORMNAME="" UNITNAME="ssleay32.lib" CONTAINERID="LibTool" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="OPCMap.cpp" FORMNAME="" UNITNAME="OPCMap" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="Unit3.cpp" FORMNAME="TOPCInstallForm" UNITNAME="Unit3" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="TuneSystem.cpp" FORMNAME="Form_SYSTEM_Tune" UNITNAME="TuneSystem" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="About.cpp" FORMNAME="Form_about" UNITNAME="About" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="TunePort.cpp" FORMNAME="Form_PORT_Tune" UNITNAME="TunePort" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="TuneSensor.cpp" FORMNAME="Form_SENSOR_Tune" UNITNAME="TuneSensor" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="MonSysPar.cpp" FORMNAME="" UNITNAME="MonSysPar" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="SysConfMaster.cpp" FORMNAME="" UNITNAME="SysConfMaster" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="TuneDataProc.cpp" FORMNAME="Form_DataProc_Tune" UNITNAME="TuneDataProc" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="TuneInterfaces.cpp" FORMNAME="Form_Interfaces_Tune" UNITNAME="TuneInterfaces" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="Unit_enter_password.cpp" FORMNAME="Form_enter_password" UNITNAME="Unit_enter_password" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+  </FILELIST>
+  <BUILDTOOLS>
+  </BUILDTOOLS>
+
+  <IDEOPTIONS>
+[Version Info]
+IncludeVerInfo=0
+AutoIncBuild=0
+MajorVer=1
+MinorVer=0
+Release=0
+Build=0
+Debug=0
+PreRelease=0
+Special=0
+Private=0
+DLL=0
+Locale=1049
+CodePage=1251
+
+[Version Info Keys]
+CompanyName=
+FileDescription=
+FileVersion=1.0.0.0
+InternalName=
+LegalCopyright=
+LegalTrademarks=
+OriginalFilename=
+ProductName=
+ProductVersion=1.0.0.0
+Comments=
+
+[Excluded Packages]
+c:\program files (x86)\borland\cbuilder6\Bin\dclite60.bpl=Borland Integrated Translation Environment
+
+[HistoryLists\hlIncludePath]
+Count=6
+Item0=C:\Program Files (x86)\Borland\CBuilder6\Projects;..;UTILS;and3_embedded;$(BCB)\include;$(BCB)\include\vcl;..\OPCGate_lib;..\IndyStatSSL;..\lib_utils
+Item1=..;UTILS;and3_embedded;$(BCB)\include;$(BCB)\include\vcl;..\OPCGate_lib;..\IndyStatSSL;..\lib_utils
+Item2=..\;UTILS;..;and3_embedded;..\;$(BCB)\include;$(BCB)\include\vcl; ..\OPCGate_lib;..\IndyStatSSL;..\lib_utils;
+Item3=..\;UTILS;..;and3_embedded;..\..\AN-D3 Pro\BS4I1Server Gorizont;D:\CBuilder6\Projects;E:\Tenso 2009\Prog\TD232Srv;$(BCB)\include;$(BCB)\include\vcl
+Item4=UTILS;..\;and3_embedded;..;..\..\AN-D3 Pro\BS4I1Server Gorizont;D:\CBuilder6\Projects;E:\Tenso 2009\Prog\TD232Srv;$(BCB)\include;$(BCB)\include\vcl
+Item5=..\;and3_embedded;..;..\..\AN-D3 Pro\BS4I1Server Gorizont;D:\CBuilder6\Projects;E:\Tenso 2009\Prog\TD232Srv;$(BCB)\include;$(BCB)\include\vcl
+
+[HistoryLists\hlLibraryPath]
+Count=5
+Item0=UTILS;$(BCB)\Projects\Lib;$(BCB)\lib\obj;$(BCB)\lib;$(BCB)\Projects
+Item1=UTILS;$(BCB)\Projects\Lib;$(BCB)\lib\obj;$(BCB)\lib;  $(BCB)\Projects;$(BCB)\Projects\Lib;$(BCB)\lib\obj;$(BCB)\lib
+Item2=UTILS;$(BCB)\Projects\Lib;$(BCB)\lib\obj;$(BCB)\lib
+Item3=UTILS;..\;..;and3_embedded;..\..\AN-D3 Pro\BS4I1Server Gorizont;D:\CBuilder6\Projects;E:\Tenso 2009\Prog\TD232Srv;$(BCB)\Projects\Lib;$(BCB)\lib\obj;$(BCB)\lib
+Item4=..\;and3_embedded;..;..\..\AN-D3 Pro\BS4I1Server Gorizont;D:\CBuilder6\Projects;E:\Tenso 2009\Prog\TD232Srv;$(BCB)\Projects\Lib;$(BCB)\lib\obj;$(BCB)\lib
+
+[HistoryLists\hlDebugSourcePath]
+Count=1
+Item0=$(BCB)\source\vcl
+
+[HistoryLists\hlIntOutputDir]
+Count=1
+Item0=work
+
+[Debugging]
+DebugSourceDirs=$(BCB)\source\vcl
+
+[Parameters]
+RunParams=
+Launcher=
+UseLauncher=0
+DebugCWD=
+HostApplication=
+RemoteHost=
+RemotePath=
+RemoteLauncher=
+RemoteCWD=
+RemoteDebug=0
+
+[Compiler]
+ShowInfoMsgs=0
+LinkDebugVcl=0
+LinkCGLIB=0
+
+[CORBA]
+AddServerUnit=1
+AddClientUnit=1
+PrecompiledHeaders=1
+  </IDEOPTIONS>
+</PROJECT>

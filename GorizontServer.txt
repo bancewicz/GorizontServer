@@ -1,0 +1,66 @@
+[Common]
+Caption=Gorizont Server
+Name=Gorizont Server
+IPPort1=502
+IPPort2=503
+ShowAdvanced=1
+NumOfPorts=1
+CanCopy=0
+CanHide=0
+CanClose=0
+CanSave=1
+MemoCount=60
+MemoDel=1
+;SrsBufSize=32768
+SrsBufSize=65536
+SrsBufToSave=1
+SerialNumber=168514497
+CanInfo=1
+[Timers]
+TmUpdateInt=100
+TmRun=1000
+TmStart=1000
+TmSave=1000
+[Pauses]
+PPauseTick=100
+PReOpen=5000
+PClose=5000
+PExit=10000
+[Sleeps]
+SAdrChange=16
+SIdle=1
+SRError=0
+SCRCError=600
+[TimeOuts]
+TORCom=1000
+TOWCom=5000
+TORDat=1000
+TOWDat=5000
+[Errors]
+NumRErrSrs=13
+NumCErrSrs=13
+
+
+[Port1]
+Name=Moxa UPort 1150
+Num=1
+BaudRate=115200
+On=1
+NumOfSensors=1
+
+Name1=AN-D3 No1 (Акселерометр АН-Д3,ускорение)
+N1=1
+On1=1
+adr1=2
+SND31=804
+Xo1=0
+Yo1=0
+To1=0
+InvY1=0
+RotX1=0
+SetData1=
+AdjData1=
+Note1=Линия 1, 120 Ом
+
+
+;//Второй порт в системе

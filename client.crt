@@ -1,0 +1,94 @@
+Certificate:
+    Data:
+        Version: 3 (0x2)
+        Serial Number: 2 (0x2)
+        Signature Algorithm: md5WithRSAEncryption
+        Issuer: C=RU, ST=-, L=SPb, O=OPCGate, OU=-, CN=OPCGate CA/name=OPCGate CA/emailAddress=admin@opcgate.ru
+        Validity
+            Not Before: May 15 12:38:15 2014 GMT
+            Not After : May 12 12:38:15 2024 GMT
+        Subject: C=RU, ST=-, L=SPb, O=OPCGate, OU=-, CN=client/name=client/emailAddress=admin@opcgate.ru
+        Subject Public Key Info:
+            Public Key Algorithm: rsaEncryption
+            RSA Public Key: (2048 bit)
+                Modulus (2048 bit):
+                    00:ca:84:65:ee:a7:6a:98:86:ed:5d:c3:bf:af:f6:
+                    9a:03:be:1e:58:23:7c:75:07:09:c5:b0:3f:44:e2:
+                    80:d5:55:cb:75:78:6f:ba:94:4f:0c:4e:f1:f3:d4:
+                    e1:53:0f:05:23:a0:12:4b:35:76:aa:fa:50:73:b5:
+                    f4:a7:33:03:d9:a5:90:da:6a:f4:86:0c:21:47:29:
+                    bd:43:a9:eb:06:11:59:d0:bd:06:eb:02:57:e7:72:
+                    d6:3d:29:2d:22:53:16:e9:a4:0c:7b:29:d9:97:ca:
+                    b8:99:85:a2:8c:7d:85:22:5c:72:11:5d:ad:36:13:
+                    9e:33:a7:e2:21:99:fa:55:96:76:50:9f:9c:c3:f8:
+                    93:41:b8:a8:1c:3e:76:39:21:1c:92:ba:54:2f:c2:
+                    15:18:aa:4a:7e:0d:27:db:3a:a5:fb:ab:68:c1:3e:
+                    de:36:e3:1e:c3:2b:f4:1e:87:d5:bb:7e:fe:de:6b:
+                    e9:73:34:de:3a:bb:ec:84:fd:ff:b1:8a:d9:cb:18:
+                    91:17:4a:76:62:2e:ce:d5:f7:6b:b2:a5:c3:79:f8:
+                    44:d6:a5:23:f2:3f:d8:b7:7c:88:b8:f6:80:57:e8:
+                    0f:93:55:11:68:2a:af:82:70:84:15:27:6a:e3:45:
+                    a5:86:65:c4:83:05:d5:99:bf:7e:52:73:78:65:9f:
+                    57:09
+                Exponent: 65537 (0x10001)
+        X509v3 extensions:
+            X509v3 Basic Constraints: 
+                CA:FALSE
+            Netscape Comment: 
+                Easy-RSA Generated Certificate
+            X509v3 Subject Key Identifier: 
+                2E:09:37:03:93:2B:5A:42:17:5E:D4:67:CE:2B:E2:F8:F2:C5:E6:97
+            X509v3 Authority Key Identifier: 
+                keyid:25:A7:39:C7:3F:FB:BC:E9:20:81:BF:35:B3:B9:A4:19:04:43:B2:66
+                DirName:/C=RU/ST=-/L=SPb/O=OPCGate/OU=-/CN=OPCGate CA/name=OPCGate CA/emailAddress=admin@opcgate.ru
+                serial:CE:CF:31:FC:92:DC:65:75
+
+            X509v3 Extended Key Usage: 
+                TLS Web Client Authentication
+            X509v3 Key Usage: 
+                Digital Signature
+    Signature Algorithm: md5WithRSAEncryption
+        23:bc:74:ab:69:e9:6e:d5:f0:d5:63:6c:84:7e:a8:f8:14:0a:
+        68:62:1e:b6:26:09:8a:0c:85:1e:33:83:dd:ea:b8:98:6f:c1:
+        a2:b0:37:e5:72:a0:87:be:10:a3:2b:e0:42:a9:69:15:fd:20:
+        e0:d3:db:ca:92:f6:a2:2e:a5:6a:89:1d:95:c0:87:63:99:96:
+        0a:47:de:a6:e7:e6:8d:c2:34:10:4a:2e:07:f9:09:8f:5e:63:
+        fc:f0:07:51:be:41:bb:7c:14:7e:01:a3:53:ca:65:b5:ef:c3:
+        83:3e:22:9c:da:81:10:34:36:0f:fc:6b:4c:78:f5:4e:c5:a7:
+        f3:3c:6a:cf:f8:62:d6:51:96:2b:86:29:83:5f:9b:47:71:b3:
+        e5:89:cc:4e:82:f7:45:df:df:d0:d7:e3:e7:37:47:ad:98:99:
+        22:61:a6:60:4f:32:11:af:48:08:15:62:94:c9:bf:46:a9:af:
+        50:17:49:60:20:52:03:34:14:a3:78:76:dc:7c:22:ec:57:5f:
+        ba:9f:57:dd:06:70:52:6c:d3:f0:7b:3b:d3:54:fd:e9:87:23:
+        79:29:1b:2f:6c:2d:6f:fd:e6:97:25:b7:95:d1:96:3c:58:dd:
+        bf:18:bd:3b:eb:83:8a:79:3a:59:3c:60:3e:cc:a2:17:8f:d8:
+        29:36:ca:c4
+-----BEGIN CERTIFICATE-----
+MIIE3jCCA8agAwIBAgIBAjANBgkqhkiG9w0BAQQFADCBkDELMAkGA1UEBhMCUlUx
+CjAIBgNVBAgTAS0xDDAKBgNVBAcTA1NQYjEQMA4GA1UEChMHT1BDR2F0ZTEKMAgG
+A1UECxMBLTETMBEGA1UEAxMKT1BDR2F0ZSBDQTETMBEGA1UEKRMKT1BDR2F0ZSBD
+QTEfMB0GCSqGSIb3DQEJARYQYWRtaW5Ab3BjZ2F0ZS5ydTAeFw0xNDA1MTUxMjM4
+MTVaFw0yNDA1MTIxMjM4MTVaMIGIMQswCQYDVQQGEwJSVTEKMAgGA1UECBMBLTEM
+MAoGA1UEBxMDU1BiMRAwDgYDVQQKEwdPUENHYXRlMQowCAYDVQQLEwEtMQ8wDQYD
+VQQDEwZjbGllbnQxDzANBgNVBCkTBmNsaWVudDEfMB0GCSqGSIb3DQEJARYQYWRt
+aW5Ab3BjZ2F0ZS5ydTCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAMqE
+Ze6napiG7V3Dv6/2mgO+HlgjfHUHCcWwP0TigNVVy3V4b7qUTwxO8fPU4VMPBSOg
+Eks1dqr6UHO19KczA9mlkNpq9IYMIUcpvUOp6wYRWdC9BusCV+dy1j0pLSJTFumk
+DHsp2ZfKuJmFoox9hSJcchFdrTYTnjOn4iGZ+lWWdlCfnMP4k0G4qBw+djkhHJK6
+VC/CFRiqSn4NJ9s6pfuraME+3jbjHsMr9B6H1bt+/t5r6XM03jq77IT9/7GK2csY
+kRdKdmIuztX3a7Klw3n4RNalI/I/2Ld8iLj2gFfoD5NVEWgqr4JwhBUnauNFpYZl
+xIMF1Zm/flJzeGWfVwkCAwEAAaOCAUcwggFDMAkGA1UdEwQCMAAwLQYJYIZIAYb4
+QgENBCAWHkVhc3ktUlNBIEdlbmVyYXRlZCBDZXJ0aWZpY2F0ZTAdBgNVHQ4EFgQU
+Lgk3A5MrWkIXXtRnzivi+PLF5pcwgcUGA1UdIwSBvTCBuoAUJac5xz/7vOkggb81
+s7mkGQRDsmahgZakgZMwgZAxCzAJBgNVBAYTAlJVMQowCAYDVQQIEwEtMQwwCgYD
+VQQHEwNTUGIxEDAOBgNVBAoTB09QQ0dhdGUxCjAIBgNVBAsTAS0xEzARBgNVBAMT
+Ck9QQ0dhdGUgQ0ExEzARBgNVBCkTCk9QQ0dhdGUgQ0ExHzAdBgkqhkiG9w0BCQEW
+EGFkbWluQG9wY2dhdGUucnWCCQDOzzH8ktxldTATBgNVHSUEDDAKBggrBgEFBQcD
+AjALBgNVHQ8EBAMCB4AwDQYJKoZIhvcNAQEEBQADggEBACO8dKtp6W7V8NVjbIR+
+qPgUCmhiHrYmCYoMhR4zg93quJhvwaKwN+VyoIe+EKMr4EKpaRX9IODT28qS9qIu
+pWqJHZXAh2OZlgpH3qbn5o3CNBBKLgf5CY9eY/zwB1G+Qbt8FH4Bo1PKZbXvw4M+
+IpzagRA0Ng/8a0x49U7Fp/M8as/4YtZRliuGKYNfm0dxs+WJzE6C90Xf39DX4+c3
+R62YmSJhpmBPMhGvSAgVYpTJv0apr1AXSWAgUgM0FKN4dtx8IuxXX7qfV90GcFJs
+0/B7O9NU/emHI3kpGy9sLW/95pclt5XRljxY3b8YvTvrg4p5Olk8YD7MoheP2Ck2
+ysQ=
+-----END CERTIFICATE-----

@@ -1,0 +1,89 @@
+[Common]
+Caption=BS4I1 Сервер (Горизонт)
+Name=BS4I1 Сервер
+IPPort1=502
+IPPort2=503
+ShowAdvanced=1
+NumOfPorts=2
+CanCopy=0
+CanHide=0
+CanClose=0
+CanSave=0
+MemoCount=60
+MemoDel=1
+SrsBufSize=8192
+SrsBufToSave=1
+SerialNumber=168514497
+CanInfo=0
+[Timers]
+TmUpdateInt=100
+TmRun=1000
+TmStart=100
+TmSave=1000
+[Pauses]
+PPauseTick=100
+PReOpen=5000
+PClose=5000
+PExit=10000
+[Sleeps]
+SAdrChange=16
+SIdle=1
+SRError=0
+SCRCError=600
+[TimeOuts]
+TORCom=10000
+TOWCom=1000
+TORDat=10000
+TOWDat=2000
+[Errors]
+NumRErrSrs=13
+NumCErrSrs=13
+[Port1]
+Name=Адаптер PCI-RS485 (VXC-142(i)AU)
+Num=8
+On=0
+NumOfSensors=2
+Name1=Инклинометр И1 (ИН-Д3, BS4I1-02, TMP05, ускорение)
+N1=1
+On1=1
+adr1=1
+SND31=804
+Xo1=0
+Yo1=0
+To1=0
+InvY1=0
+RotX1=0
+SetData1=
+AdjData1=
+Note1=Линия 1, 120 Ом
+Name2=Инклинометр И2 (ИН-Д3, BS4I1-02, TMP05, ускорение)
+N2=2
+On2=0
+adr2=9
+SND32=802
+Xo2=0
+Yo2=0
+To2=0
+InvY2=0
+RotX2=0
+SetData2=
+AdjData2=
+Note2=Линия 1
+[Port2]
+Name=Адаптер PCI-RS485 (VXC-142(i)AU)
+Num=9
+On=0
+NumOfSensors=1
+Name1=Инклинометр И1 (ИН-Д3, BS4I1-02, TMP05, ускорение)
+N1=3
+On1=1
+adr1=1
+SND31=804
+Xo1=0
+Yo1=0
+To1=0
+InvY1=0
+RotX1=0
+SetData1=
+AdjData1=
+Note1=Линия 1, 120 Ом

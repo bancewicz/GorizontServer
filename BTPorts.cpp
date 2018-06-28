@@ -1,0 +1,135 @@
+// BPorts.cpp
+//-----------------------------------------------------------------------------
+#include <windows.h>
+#include <stdio.h>
+#include <sys\timeb.h>
+#include <SyncObjs.hpp>
+//-----------------------------------------------------------------------------
+#include "BTPorts.h"
+//-----------------------------------------------------------------------------
+TBTPorts::TBTPorts(void) { wstate=oldwstate=0xFFFFFFFF;}
+//-----------------------------------------------------------------------------
+void TBTPorts::SetWState(int i,DWORD ws) { wstate=(wstate&(~(3<<(i*2))))+((ws&3)<<(i*2));}
+DWORD TBTPorts::GetWState(int i) { return ((3<<(i*2))&wstate)>>((i*2));}
+DWORD TBTPorts::GetOldWState(int i) { return ((3<<(i*2))&oldwstate)>>((i*2));}
+//-----------------------------------------------------------------------------
+int TBTPorts::NumSens(void)
+{
+  int n=0;
+  
+          for(int i=0;i<NumPrs;i++)
+          {
+                  n+=Ps[i].NumPSrs;
+          }
+
+  return n;
+}
+//-----------------------------------------------------------------------------
+void TBTPorts::Add(int port,DWORD rate)
+{
+//Если список переполнен добавиьт нельзя
+  if(NumPrs>=MaxNumPrs) return;
+
+//Если поротв в системе больше допустимого номера порта добавить нельзя
+  if(NumPrs>=MaxPrsSel) return;
+
+//Добавляем порт в список
+  Ps[NumPrs].p=port;Ps[NumPrs].on=false;Ps[NumPrs].NumPSrs=0;
+//Создаем экземпляр СОМ порта, устанавливаем скорость
+  Ps[NumPrs].CPrt=new TCOMPort;Ps[NumPrs].CPrt->dcb.BaudRate=rate;
+//??? Время закрытия порта время открытия порта
+  Ps[NumPrs].TmOpen=Now();Ps[NumPrs].TmClose=Ps[NumPrs].TmOpen;
+
+
+// ИН-Д3  
+  Ps[NumPrs].CPrt->st.baud=rate;
+
+  NumPrs++;
+}
+//-----------------------------------------------------------------------------
+void TBTPorts::Delete(int ix)
+{
+//Если порт ыключен в опрос удалить нельзя
+  if(Ps[ix].on) return;
+
+//Если в системе нет портов удалить нельзя
+  if(NumPrs==0) return;
+
+//Удалить объект порта из записи ix
+  delete Ps[ix].CPrt;
+
+//перемещаем записи от удаленного порта  до конца списка
+  for(int i=ix;i<NumPrs-1;i++)
+  {
+    Ps[i]=Ps[i+1];
+
+//Если процесс опроса пота запущен двигаем указатели на потоки обслуживания
+    if(Ps[i].CThr!=NULL)
+    {
+      Ps[i].CThr->on=&(Ps[i].on);
+      Ps[i].CThr->run=&(Ps[i].run);
+      Ps[i].CThr->TmClose=&(Ps[i].TmClose);
+      Ps[i].CThr->CPrt=Ps[i].CPrt;
+      Ps[i].CThr->Srs=Ps[i].Srs;
+    }
+  }
+
+  NumPrs--;
+}
+//-----------------------------------------------------------------------------
+void TBTPorts::Run(int i)
+{
+//Если уже включенвыход
+  if(Ps[i].on) return;
+
+//Запускаем поток для заданного порта
+  Ps[i].CThr=new TTDThread(false,Ps[i].p,&(Ps[i].on),&(Ps[i].run),Ps[i].CPrt,&(Ps[i].TmClose),Ps[i].NumPSrs,Ps[i].Srs);
+
+//Фиксируем времяоткрытия порта
+  Ps[i].TmOpen=Now();Ps[i].TmClose=Ps[i].TmOpen-1.0/24.0/3600.0/1000.0;
+
+//???
+  Ps[i].CPrt->br=Ps[i].CPrt->bw=Ps[i].CPrt->er=Ps[i].CPrt->ew=Ps[i].CPrt->ec=Ps[i].CPrt->eo=Ps[i].CPrt->lerr=Ps[i].CPrt->lbr=Ps[i].CPrt->cmdnum=0;
+
+//Сообщаем всем датчикам в списке порта что порт открыт и мониторинг включен
+  for(int j=0;j<Ps[i].NumPSrs;j++)
+  {
+        Ps[i].Srs[j]->porton=true;
+        Ps[i].Srs[j]->dataon=false;
+  }
+
+}
+//-----------------------------------------------------------------------------
+void TBTPorts::Stop(int i)
+{
+  if(!Ps[i].on) return;
+//Останавливаем опрос для заданного порта
+  __try { Ps[i].CThr->Terminate();}
+  catch(...) {};
+  for(int j=0;j<Ps[i].NumPSrs;j++) Ps[i].Srs[j]->porton=false;
+}
+//-----------------------------------------------------------------------------
+
+AnsiString TBTPorts::StrTm(int i)
+{
+  AnsiString s;
+  if(i>=NumPrs) return "*";
+
+  double dt,TmM=Now(),to=Ps[i].CPrt->TmOpen,tc=Ps[i].CPrt->TmClose;
+
+  if(tc>=to) dt=tc-to;else dt=TmM-to;
+  int hs=dt*24.0;s=hs;s+=FormatDateTime(":nn:ss",dt-hs/24.0);
+  return s;
+}
+//-----------------------------------------------------------------------------
+AnsiString TBTPorts::StrTmOn(int i)
+{
+  AnsiString s;
+  if(i>=NumPrs) return "*";
+  double dt,TmM=Now(),to=Ps[i].TmOpen,tc=Ps[i].TmClose;
+  if(tc>=to) dt=tc-to;else dt=TmM-to;
+  int hs=dt*24.0;s=hs;s+=FormatDateTime(":nn:ss",dt-hs/24.0);
+  return s;
+}
+//-----------------------------------------------------------------------------
+

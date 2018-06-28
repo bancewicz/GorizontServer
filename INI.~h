@@ -1,0 +1,319 @@
+//---------------------------------------------------------------------------
+struct { int Num;int A[100];int ID[100];} D3List;
+//---------------------------------------------------------------------------
+DWORD GetVolumeSN(AnsiString sPuth)
+{
+  char VolumeName[255], FileSystemName[100];
+  unsigned long VolumeSerialNo, MaxComponentLength, FileSystemFlags;
+  //AnsiString Ts;
+  GetVolumeInformation(sPuth.c_str(),VolumeName,255,&VolumeSerialNo,&MaxComponentLength, &FileSystemFlags,FileSystemName, 100);
+  //Ts=IntToHex((int)VolumeSerialNo,8);
+  return (DWORD)VolumeSerialNo;
+}
+//---------------------------------------------------------------------------
+void TFMain::INI(bool read)
+{
+
+  this->SysConfMaster.BackUpMenuItem=this->N_backup;
+
+  this->SysConfMaster.CheckBackUp();
+
+  gIniFile=NULL;
+
+  AnsiString s;DWORD sn,sc,sd;
+
+//  TIniFile *ini=new TIniFile(ChangeFileExt(Application->ExeName,".ini"));
+
+  TIniFile *ini=new TIniFile(this->SysConfMaster.gIniFilePath);
+
+  if(read)
+  {
+
+ //Глобальный указатель на ини файл - используется при визуальных настройках системы
+     gIniFile=ini;
+
+//Мастеру конфигурации указатель на действующий ини файл
+     this->SysConfMaster.gIniFile=ini;
+
+    // !!! Gorizont
+    AnsiString stmp=ChangeFileExt(ExtractFileName(Application->ExeName),"");
+
+//    if(TRIAL)
+//     Caption=ini->ReadString("Common","Caption",stmp+" (ошибка: не найден файл "+stmp+".ini)")+" (Trial)";
+//    else
+     //Caption=ini->ReadString("Common","Caption",stmp+" (ошибка: не найден файл "+stmp+".ini)");
+
+//Из текущего ини читаем заголовок главного окна программы
+    Caption=ini->ReadString("Common","Caption",stmp+" (Создана новая система "+stmp+".ini)");
+//Дополнительное хранилище оно понадобится при настройке параметров системы
+    CCaption=Caption;
+//Применяем в главном окне
+    Caption=Caption+" [";
+    Caption=Caption+this->SysConfMaster.gIniFilePath;
+    Caption=Caption+"]";
+
+    //Caption=ini->ReadString("Common","Caption","Ошибка: Не найден файл "+ChangeFileExt(ExtractFileName(Application->ExeName),".ini"));
+
+    //Caption=ini->ReadString("Common","Caption","Ошибка: Не найден файл BS4I1Server.ini");
+
+    //??? BTPorts - это "куст" СОМ портов от одного BT
+    BTPrs.Name=ini->ReadString("Common","Name","Новая система");
+    //BTPrs.Name=ini->ReadString("Common","Name","BS4I1 Сервер");if(BTPrs.Name=="") BTPrs.Name="BS4I1 Сервер";
+    Server1->Port=ini->ReadInteger("Common","IPPort1",502);
+    Server2->Port=ini->ReadInteger("Common","IPPort2",503);
+
+    TSTest->TabVisible=ini->ReadBool("Common","ShowAdvanced",false);
+    TSTest->TabVisible=!SERVER_SECURITY;    //??? повторное присвоение
+
+//Количество СОМ портов в системе (каналов)
+    int NPrs=ini->ReadInteger("Common","NumOfPorts",0);
+
+//сохранять результаты измерений и журнал событий в файлах
+    fCanclose=ini->ReadBool("Common","CanClose",true);
+
+//не выводить окно предупреждения при закрытии программы
+    fOpenHid=ini->ReadBool("Common","CanHide",false); // gluk 4
+
+//Количество последних записей, отображаемых во вкладке измерений
+    CanSave=ini->ReadBool("Common","CanSave",true);
+
+//Запись данных по ускорениям в текстовом виде
+    SaveAccTxt=ini->ReadBool("Common","SaveAccTxt",false);
+
+//------------------------------------------------------------------------------
+
+//Включение OPC DA Интерфейса
+    CanOPCDA=ini->ReadBool("Common","CanOPCDA",false);
+
+//Включение Modbus Интерфейса
+    CanModbus=ini->ReadBool("Common","CanModbus",true);
+
+//!!!
+//В данной  версии OPC принудительно отключаем
+
+    CanOPCDA=false;
+
+//------------------------------------------------------------------------------
+
+//Запрашивать дополнительную информацию о состоянии датчика
+    CBStat->Checked=ini->ReadBool("Common","CanInfo",false);
+
+// Количество последних записей, отображаемых во вкладке измерений
+    MEMO_COUNT=ini->ReadInteger("Common","MemoCount",60);
+
+//количество записей во вкладке измерений, которые удаляются после переполнения
+    MEMO_DEL=ini->ReadInteger("Common","MemoDel",1);
+
+// Размер в пакетах циклического буфера акселерометра. Каждый пакет содержит измерения ускорений по двум каналам X и Y
+    SrsBufPSize=ini->ReadInteger("Common","SrsBufSize",8192);
+
+// Параметр, с помощью которого задается количество измерений ускорений N, которые записываются в отдельный файл, где N = SrsBufSize*32*SrsBufToSave
+    SrsBufToSave=ini->ReadInteger("Common","SrsBufToSave",1);
+
+// Серийный номер копии программы
+    s=ini->ReadString("Common","SerialNumber","");
+
+//Серийный номер диска С
+    sn=(DWORD)s.ToIntDef(0);sc=GetVolumeSN("C:\\");sd=GetVolumeSN("d:\\");
+
+    if(SERVER_SECURITY) SERVER_SECURITY=(sn!=(((sc+sd)&0xFFFFFFF)^0x1234567));
+
+
+//Число портов в системе
+    if(NPrs>MaxNumPrs) NPrs=MaxNumPrs;
+
+//Число датчиков на одном порту
+    int NSrs=0;
+
+    for(int i=0;i<NPrs;i++)
+    {
+
+//Читаем номер СОМ порта для данной записи
+//??? Лихо к строке интежер приплюсовали
+      int p=ini->ReadInteger((s="Port")+(i+1),"Num",1)-1;
+
+//Читаем скорость
+      DWORD BaudRate=ini->ReadInteger((s="Port")+(i+1),"BaudRate",115200);
+
+//Читаем комментарий, все заносим в структуру
+      BTPrs.Ps[i].Name=ini->ReadString((s="Port")+(i+1),"Name","Стандартный СОМ-порт");
+      if(BTPrs.Ps[i].Name=="") BTPrs.Ps[i].Name=(s="COM")+(p+1);
+      BTPrs.Add(p,BaudRate);
+
+//Смотрим включен ли в опрос
+      bool run=ini->ReadBool((s="Port")+(i+1),"On",false);
+
+//Число датчиков
+      BTPrs.Ps[i].NumPSrs=ini->ReadInteger((s="Port")+(i+1),"NumOfSensors",0);
+
+//Читаем инфу по каждому датчику
+      for(int j=0;j<BTPrs.Ps[i].NumPSrs;j++)
+      {
+//Ограничение числа датчиков в системе
+        if(TRIAL) {if(NSrs==TrialSrs) { BTPrs.Ps[i].NumPSrs=j;break;}}
+        else      {if(NSrs==MaxNumSrs) { BTPrs.Ps[i].NumPSrs=j;break;}}
+
+//???это я непонял чтотакое порядковый номер датчика в системе???
+        int N=ini->ReadInteger((s="Port")+(i+1),(s="N")+(j+1),j+1)-1;
+//Вот тут списку датчиков на порту присвоили указатель согласно начало+номер датчика в системе
+
+        BTPrs.Ps[i].Srs[j]=BTSrs+N;
+
+//???И уже работаем с ним как будто он создан а гдебыла инициализация
+        BTPrs.Ps[i].Srs[j]->N=N;
+
+//Имя датчика
+        BTPrs.Ps[i].Srs[j]->Name=ini->ReadString((s="Port")+(i+1),(s="Name")+(j+1),"ИН-Д3");
+
+//Тут смотрим если тип датчика не прописан явно, или ИН-Д3
+        if ( strstr (BTPrs.Ps[i].Srs[j]->Name.c_str(), "IN-D3")||(strstr (BTPrs.Ps[i].Srs[j]->Name.c_str(), "ИН-Д3")))  //=="Инклинометр (ИН-Д3,BS4I1-03,TMP05)")
+        {
+             if (j==0)
+             {
+//Назначаем выбранному порту работатьс ИН-Д3 (при формировании первого по списку датчика)
+                  BTPrs.Ps[i].CPrt->CreateProtocol211();
+             }
+        }
+
+        if(BTPrs.Ps[i].Srs[j]->Name=="") BTPrs.Ps[i].Srs[j]->Name=(s="Датчик ")+(N+1);
+
+        // 1.0.2 Ветер
+        BTPrs.Ps[i].Srs[j]->isMeteo=BTPrs.Ps[i].Srs[j]->Name.Pos("ветер")>0;        // Подключена метеостанция
+        BTPrs.Ps[i].Srs[j]->isBS=   BTPrs.Ps[i].Srs[j]->Name.Pos("BS4I1-04")>0;     // Блок сопряжения
+        BTPrs.Ps[i].Srs[j]->isTermo=BTPrs.Ps[i].Srs[j]->Name.Pos("подогрев")>0;     // Подключен нагреватель
+        BTPrs.Ps[i].Srs[j]->isTMP05=BTPrs.Ps[i].Srs[j]->Name.Pos("TMP05")>0;        // Подключен датчик температуры
+
+//По умолчанию ускорения измеряем
+
+        //BTPrs.Ps[i].Srs[j]->isAccel=BTPrs.Ps[i].Srs[j]->Name.Pos("ускорение")>0;    // Подключен акселерометр
+
+        BTPrs.Ps[i].Srs[j]->isAccel=ini->ReadBool((s="Port")+(i+1),(s="AccelOn")+(j+1),true)||BTPrs.Ps[i].Srs[j]->Name.Pos("ускорение")>0;
+
+        BTPrs.Ps[i].Srs[j]->isHoriz=BTPrs.Ps[i].Srs[j]->Name.Pos("гориз. откл.")>0; // Измерение горизонтальных отклонений
+
+        BTPrs.Ps[i].Srs[j]->isInd3_211=BTPrs.Ps[i].Srs[j]->Name.Pos("IN-D3")>0;     // Датчик ИН-Д3 протокол 2.11
+        BTPrs.Ps[i].Srs[j]->isInd3_211=BTPrs.Ps[i].Srs[j]->Name.Pos("ИН-Д3")>0;     // Датчик ИН-Д3 протокол 2.11
+
+
+        BTPrs.Ps[i].Srs[j]->on=ini->ReadBool((s="Port")+(i+1),(s="On")+(j+1),false);
+
+//??? Вот - датчику назначаем уже адрес а когда он былсоздан?        
+        BTPrs.Ps[i].Srs[j]->adr=ini->ReadInteger((s="Port")+(i+1),(s="adr")+(j+1),1);
+
+//Сотрим - если канал работает с 2.11 добавляемдатчик с таким адресом в список протокола 2.11
+
+        if (BTPrs.Ps[i].CPrt->Protocol211)
+        {
+             BTPrs.Ps[i].CPrt->AddIND3Sensor(BTPrs.Ps[i].Srs[j]->adr);
+        }
+
+
+        BTPrs.Ps[i].Srs[j]->SND3=ini->ReadInteger((s="Port")+(i+1),(s="SND3")+(j+1),1);
+
+        BTPrs.Ps[i].Srs[j]->X0=ini->ReadFloat((s="Port")+(i+1),(s="Xo")+(j+1),0.0);
+        BTPrs.Ps[i].Srs[j]->Y0=ini->ReadFloat((s="Port")+(i+1),(s="Yo")+(j+1),0.0);
+        BTPrs.Ps[i].Srs[j]->T0=ini->ReadFloat((s="Port")+(i+1),(s="To")+(j+1),0.0);
+        BTPrs.Ps[i].Srs[j]->InvY=ini->ReadBool((s="Port")+(i+1), (s="InvY")+(j+1),false);
+        BTPrs.Ps[i].Srs[j]->RotX=ini->ReadFloat((s="Port")+(i+1),(s="RotX")+(j+1),0.0);
+        BTPrs.Ps[i].Srs[j]->Tm_Start=BTPrs.Ps[i].Srs[j]->Tm_Stop=CoreTime();
+        BTPrs.Ps[i].Srs[j]->SetData=ini->ReadString((s="Port")+(i+1),(s="SetData")+(j+1),"23.03.12");
+        BTPrs.Ps[i].Srs[j]->AdjData=ini->ReadString((s="Port")+(i+1),(s="AdjData")+(j+1),"23.03.12");
+        BTPrs.Ps[i].Srs[j]->Note=ini->ReadString((s="Port")+(i+1),(s="Note")+(j+1),"Испытания в лаборатории");
+        BTPrs.Ps[i].Srs[j]->Place=ini->ReadString((s="Port")+(i+1),(s="Place")+(j+1),"Расположение на объекте");
+        BTPrs.Ps[i].Srs[j]->SBuf.InitBuf(true);
+        if(BTPrs.Ps[i].Srs[j]->isMeteo) BTPrs.Ps[i].Srs[j]->SWBuf.InitBuf(true);
+
+
+        NSrs++;
+
+      }
+
+      if(run) BTPrs.Run(i);
+    }
+
+
+    TmUpdate->Interval=ini->ReadInteger("Timers","TmUpdateInt",100);
+    TmRun->Interval=ini->ReadInteger("Timers","TmRun",1000);ETmRun->Text=TmRun->Interval;
+    TmStart->Interval=ini->ReadInteger("Timers","TmStart",1000);
+//    TmSave->Interval=ini->ReadInteger("Timers","TmSave",60000);ETmSave->Text=TmSave->Interval;
+
+    TmSave->Interval=ini->ReadInteger("Timers","TmSave",1000);ETmSave->Text=TmSave->Interval;
+
+    PPauseTick= ini->ReadInteger("Pauses","PPauseTick",100);TmHideExit->Interval=PPauseTick;
+    PReOpen=    ini->ReadInteger("Pauses","PReOpen",5000);
+    PClose=     ini->ReadInteger("Pauses","PClose",5000);
+    PExit=      ini->ReadInteger("Pauses","PExit",0);
+
+    //PExit=      ini->ReadInteger("Pauses","PExit",10000);
+    SAdrChange= ini->ReadInteger("Sleeps","SAdrChange",16);
+    SIdle=      ini->ReadInteger("Sleeps","SIdle",1);
+    SRError=    ini->ReadInteger("Sleeps","SRError",0);
+    SCRCError=  ini->ReadInteger("Sleeps","SCRCError",600);
+
+    TORCom=     ini->ReadInteger("TimeOuts","TORCom",200);
+    TOWCom=     ini->ReadInteger("TimeOuts","TOWCom",100);
+    TORDat=     ini->ReadInteger("TimeOuts","TORDat",4000);
+    TOWDat=     ini->ReadInteger("TimeOuts","TOWDat",2000);
+    NumRErrSrs= ini->ReadInteger("Errors","NumRErrSrs",10);
+    NumCErrSrs= ini->ReadInteger("Errors","NumCErrSrs",10);
+
+    D3List.Num= ini->ReadInteger("D3","Num",0);
+    for(int i=0;i<D3List.Num;i++)
+    {
+      D3List.A[i] = ini->ReadInteger("D3",(s="A")+(i+1),0);
+      D3List.ID[i]= ini->ReadInteger("D3",(s="ID")+(i+1),0);
+    }
+  }
+  else
+  {
+    // >>>TRegistryIniFile *ini=new TRegistryIniFile(ChangeFileExt("BS4I1",""));
+    if(TSTest->TabVisible)
+    {
+      // !!! Gorizont
+      if(Caption.Pos("ошибка")>0) ini->WriteString("Common","Caption","Новый объект");
+      //if(Caption=="Ошибка: Не найден файл BS4I1Server.ini") ini->WriteString("Common","Caption","Новый объект");
+      ini->WriteBool("Common","ShowAdvanced",TSTest->TabVisible);
+      ini->WriteInteger("Common","NumOfPorts",BTPrs.NumPrs);
+      ini->WriteBool("Common","CanSave",CanSave);
+      ini->WriteBool("Common","CanInfo",CBStat->Checked);
+
+      ini->WriteInteger("Timers","TmRun",TmRun->Interval);
+      ini->WriteInteger("Timers","TmSave",TmSave->Interval);
+      for(int i=0;i<MaxPrsSel;i++) ini->EraseSection((s="Port")+(i+1));
+      for(int i=0;i<BTPrs.NumPrs;i++)
+      {
+        ini->WriteString((s="Port")+(i+1),"Name",BTPrs.Ps[i].Name);
+        ini->WriteInteger((s="Port")+(i+1),"Num",BTPrs.Ps[i].p+1);
+        ini->WriteInteger((s="Port")+(i+1),"BaudRate",BTPrs.Ps[i].CPrt->dcb.BaudRate);
+        ini->WriteBool((s="Port")+(i+1),"On",(BTPrs.Ps[i].on));
+        ini->WriteInteger((s="Port")+(i+1),"NumOfSensors",BTPrs.Ps[i].NumPSrs);
+        for(int j=0;j<BTPrs.Ps[i].NumPSrs;j++)
+        {
+          ini->WriteString((s="Port")+(i+1),(s="Name")+(j+1),BTPrs.Ps[i].Srs[j]->Name);
+          ini->WriteInteger((s="Port")+(i+1),(s="N")+(j+1),BTPrs.Ps[i].Srs[j]->N+1);
+          ini->WriteBool((s="Port")+(i+1),(s="On")+(j+1),BTPrs.Ps[i].Srs[j]->on);
+          ini->WriteInteger((s="Port")+(i+1),(s="adr")+(j+1),BTPrs.Ps[i].Srs[j]->adr);
+          ini->WriteInteger((s="Port")+(i+1),(s="SND3")+(j+1),BTPrs.Ps[i].Srs[j]->SND3);
+
+          ini->WriteFloat((s="Port")+(i+1),(s="Xo")+(j+1),BTPrs.Ps[i].Srs[j]->X0);
+          ini->WriteFloat((s="Port")+(i+1),(s="Yo")+(j+1),BTPrs.Ps[i].Srs[j]->Y0);
+          ini->WriteFloat((s="Port")+(i+1),(s="To")+(j+1),BTPrs.Ps[i].Srs[j]->T0);
+          ini->WriteBool ((s="Port")+(i+1),(s="InvY")+(j+1),BTPrs.Ps[i].Srs[j]->InvY);
+          ini->WriteFloat((s="Port")+(i+1),(s="RotX")+(j+1),BTPrs.Ps[i].Srs[j]->RotX);
+
+          ini->WriteString((s="Port")+(i+1),(s="SetData")+(j+1),BTPrs.Ps[i].Srs[j]->SetData);
+          ini->WriteString((s="Port")+(i+1),(s="AdjData")+(j+1),BTPrs.Ps[i].Srs[j]->AdjData);
+          ini->WriteString((s="Port")+(i+1),(s="Note")+(j+1),BTPrs.Ps[i].Srs[j]->Note);
+        }
+      }
+    }
+  }
+
+  //delete ini;
+
+
+  PortsAudit();
+
+}
+//-----------------------------------------------------------------------------
+

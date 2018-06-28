@@ -1,0 +1,96 @@
+Certificate:
+    Data:
+        Version: 3 (0x2)
+        Serial Number: 1 (0x1)
+        Signature Algorithm: md5WithRSAEncryption
+        Issuer: C=RU, ST=-, L=SPb, O=OPCGate, OU=-, CN=OPCGate CA/name=OPCGate CA/emailAddress=admin@opcgate.ru
+        Validity
+            Not Before: May 15 12:37:52 2014 GMT
+            Not After : May 12 12:37:52 2024 GMT
+        Subject: C=RU, ST=-, L=SPb, O=OPCGate, OU=-, CN=server/name=server/emailAddress=admin@opcgate.ru
+        Subject Public Key Info:
+            Public Key Algorithm: rsaEncryption
+            RSA Public Key: (2048 bit)
+                Modulus (2048 bit):
+                    00:be:d9:bc:09:a2:a9:84:54:3a:c0:5d:67:39:db:
+                    ff:fd:3e:15:ff:5a:37:3e:d2:62:ea:74:65:ef:59:
+                    08:64:64:7d:f5:a7:b7:9d:13:e4:ff:aa:32:8c:2e:
+                    69:2c:f7:a0:9b:1e:00:41:84:7f:e7:3d:98:45:30:
+                    f2:c6:51:fb:29:d0:89:80:00:8e:09:aa:b1:31:b9:
+                    11:c7:e0:1e:b6:53:72:73:0f:55:46:da:06:37:cb:
+                    a4:5d:11:27:d8:08:5d:9d:bf:6f:f6:a0:3e:64:15:
+                    28:fe:62:27:d4:84:0d:50:bd:f6:b6:ea:26:56:d9:
+                    e6:d2:b3:51:20:4c:bb:2e:73:6b:23:f7:f0:71:24:
+                    c3:df:ef:d0:f2:2a:53:cb:19:e3:82:a9:28:85:4f:
+                    09:ff:95:5d:9f:5a:4e:35:53:67:c9:14:05:c1:1a:
+                    03:32:3b:f0:34:49:7f:40:12:5d:ed:13:6d:f1:62:
+                    0c:58:45:b6:be:50:23:77:16:66:ae:12:c5:f6:90:
+                    4c:0d:24:a8:27:b8:50:d7:1d:76:b9:0e:1f:4c:33:
+                    53:38:42:a6:40:b8:31:8c:6c:02:ad:15:23:9d:6d:
+                    1b:38:db:b0:83:7b:63:6d:c5:1a:89:c1:43:70:71:
+                    d4:c5:54:4b:0d:55:35:13:ec:25:5e:77:85:e2:bd:
+                    52:29
+                Exponent: 65537 (0x10001)
+        X509v3 extensions:
+            X509v3 Basic Constraints: 
+                CA:FALSE
+            Netscape Cert Type: 
+                SSL Server
+            Netscape Comment: 
+                Easy-RSA Generated Server Certificate
+            X509v3 Subject Key Identifier: 
+                9A:13:BB:CD:A2:D8:8E:8F:2D:45:EC:44:FA:BD:A6:F8:88:96:93:DC
+            X509v3 Authority Key Identifier: 
+                keyid:25:A7:39:C7:3F:FB:BC:E9:20:81:BF:35:B3:B9:A4:19:04:43:B2:66
+                DirName:/C=RU/ST=-/L=SPb/O=OPCGate/OU=-/CN=OPCGate CA/name=OPCGate CA/emailAddress=admin@opcgate.ru
+                serial:CE:CF:31:FC:92:DC:65:75
+
+            X509v3 Extended Key Usage: 
+                TLS Web Server Authentication
+            X509v3 Key Usage: 
+                Digital Signature, Key Encipherment
+    Signature Algorithm: md5WithRSAEncryption
+        55:c8:53:e8:65:1e:6c:6c:6b:3b:db:bf:4f:cd:55:f7:e2:c6:
+        a5:65:8a:39:25:05:be:01:ab:c4:4e:38:92:d7:fa:e6:ce:21:
+        9d:29:b1:09:32:56:67:63:6b:9e:2c:aa:7b:1c:52:00:63:1a:
+        52:55:ee:e6:eb:0c:da:81:f1:75:06:c7:e6:db:75:ab:86:d0:
+        07:8a:64:98:df:da:85:26:ec:10:7a:b7:1f:27:1c:be:9f:53:
+        0d:87:98:2a:3a:a7:f1:ae:ee:62:d6:71:da:35:36:49:45:48:
+        d2:25:6e:96:7d:b6:89:96:41:55:c5:86:d2:a1:c9:2a:76:31:
+        b6:80:0a:6e:59:f7:bc:f1:83:27:68:f3:d6:90:cc:a8:ee:b4:
+        c0:31:b2:0a:37:24:db:79:5a:d9:4c:12:bf:1e:4b:4a:c8:50:
+        1b:20:d6:eb:7f:c8:f2:0a:0f:72:09:e5:f9:bd:20:80:41:61:
+        b5:78:7f:f8:4d:b5:fb:3a:b6:04:f1:d0:ce:5e:25:0d:f6:49:
+        e1:d9:bd:d3:74:7d:95:d8:05:2c:42:64:35:92:73:14:d1:e0:
+        39:b0:94:27:d7:cd:b2:b6:19:cc:27:01:4b:32:69:c2:5c:cc:
+        3a:0b:ca:d9:58:ec:ed:cc:9c:ff:07:5a:c4:66:30:00:c0:a0:
+        68:91:2f:12
+-----BEGIN CERTIFICATE-----
+MIIE+DCCA+CgAwIBAgIBATANBgkqhkiG9w0BAQQFADCBkDELMAkGA1UEBhMCUlUx
+CjAIBgNVBAgTAS0xDDAKBgNVBAcTA1NQYjEQMA4GA1UEChMHT1BDR2F0ZTEKMAgG
+A1UECxMBLTETMBEGA1UEAxMKT1BDR2F0ZSBDQTETMBEGA1UEKRMKT1BDR2F0ZSBD
+QTEfMB0GCSqGSIb3DQEJARYQYWRtaW5Ab3BjZ2F0ZS5ydTAeFw0xNDA1MTUxMjM3
+NTJaFw0yNDA1MTIxMjM3NTJaMIGIMQswCQYDVQQGEwJSVTEKMAgGA1UECBMBLTEM
+MAoGA1UEBxMDU1BiMRAwDgYDVQQKEwdPUENHYXRlMQowCAYDVQQLEwEtMQ8wDQYD
+VQQDEwZzZXJ2ZXIxDzANBgNVBCkTBnNlcnZlcjEfMB0GCSqGSIb3DQEJARYQYWRt
+aW5Ab3BjZ2F0ZS5ydTCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAL7Z
+vAmiqYRUOsBdZznb//0+Ff9aNz7SYup0Ze9ZCGRkffWnt50T5P+qMowuaSz3oJse
+AEGEf+c9mEUw8sZR+ynQiYAAjgmqsTG5EcfgHrZTcnMPVUbaBjfLpF0RJ9gIXZ2/
+b/agPmQVKP5iJ9SEDVC99rbqJlbZ5tKzUSBMuy5zayP38HEkw9/v0PIqU8sZ44Kp
+KIVPCf+VXZ9aTjVTZ8kUBcEaAzI78DRJf0ASXe0TbfFiDFhFtr5QI3cWZq4SxfaQ
+TA0kqCe4UNcddrkOH0wzUzhCpkC4MYxsAq0VI51tGzjbsIN7Y23FGonBQ3Bx1MVU
+Sw1VNRPsJV53heK9UikCAwEAAaOCAWEwggFdMAkGA1UdEwQCMAAwEQYJYIZIAYb4
+QgEBBAQDAgZAMDQGCWCGSAGG+EIBDQQnFiVFYXN5LVJTQSBHZW5lcmF0ZWQgU2Vy
+dmVyIENlcnRpZmljYXRlMB0GA1UdDgQWBBSaE7vNotiOjy1F7ET6vab4iJaT3DCB
+xQYDVR0jBIG9MIG6gBQlpznHP/u86SCBvzWzuaQZBEOyZqGBlqSBkzCBkDELMAkG
+A1UEBhMCUlUxCjAIBgNVBAgTAS0xDDAKBgNVBAcTA1NQYjEQMA4GA1UEChMHT1BD
+R2F0ZTEKMAgGA1UECxMBLTETMBEGA1UEAxMKT1BDR2F0ZSBDQTETMBEGA1UEKRMK
+T1BDR2F0ZSBDQTEfMB0GCSqGSIb3DQEJARYQYWRtaW5Ab3BjZ2F0ZS5ydYIJAM7P
+MfyS3GV1MBMGA1UdJQQMMAoGCCsGAQUFBwMBMAsGA1UdDwQEAwIFoDANBgkqhkiG
+9w0BAQQFAAOCAQEAVchT6GUebGxrO9u/T81V9+LGpWWKOSUFvgGrxE44ktf65s4h
+nSmxCTJWZ2NrniyqexxSAGMaUlXu5usM2oHxdQbH5tt1q4bQB4pkmN/ahSbsEHq3
+Hyccvp9TDYeYKjqn8a7uYtZx2jU2SUVI0iVuln22iZZBVcWG0qHJKnYxtoAKbln3
+vPGDJ2jz1pDMqO60wDGyCjck23la2UwSvx5LSshQGyDW63/I8goPcgnl+b0ggEFh
+tXh/+E21+zq2BPHQzl4lDfZJ4dm903R9ldgFLEJkNZJzFNHgObCUJ9fNsrYZzCcB
+SzJpwlzMOgvK2Vjs7cyc/wdaxGYwAMCgaJEvEg==
+-----END CERTIFICATE-----

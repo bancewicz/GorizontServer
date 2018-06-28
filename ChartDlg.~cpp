@@ -1,0 +1,548 @@
+//---------------------------------------------------------------------
+#include <vcl.h>
+#pragma hdrstop
+//---------------------------------------------------------------------
+#include "ChartDlg.h"
+#include "Main.h"
+//---------------------------------------------------------------------
+#pragma resource "*.dfm"
+TFChartDlg *FChartDlg;
+//---------------------------------------------------------------------
+extern int LineSeriesSel;extern TLineSeries* LSrs[32];extern SSetup Stp;
+#define MinTime 40268 // 31.03.2010
+//---------------------------------------------------------------------
+SStpChart SChart;extern SStpChart StpChart;
+//---------------------------------------------------------------------------
+__fastcall TFChartDlg::TFChartDlg(TComponent* AOwner)
+	: TForm(AOwner)
+{
+}
+//---------------------------------------------------------------------
+void TFChartDlg::InitStpChart(SStpChart *S)
+{
+  // Шкала
+  S->XMin=S->XMax=S->YMin=S->YMax=S->XDiv=S->YDiv=0.0;S->TFmt=0;
+  S->AXMin=S->AXMax=S->AYMin=S->AYMax=true;
+    // Легенда
+  S->LOn=true;S->LPos=1;S->LTop=4;S->LWidth=50;S->LLines=false;
+  for(int i=0;i<32;i++)
+  {
+    // Канал
+    S->Srs[i].ChOn=false;
+    // Линия
+    S->Srs[i].LCol=(TColor)0;S->Srs[i].LWidth=1;S->Srs[i].LStyle=0;S->Srs[i].LOn=true;
+    // Маркер
+    S->Srs[i].PCol=(TColor)0xFFFFFF;S->Srs[i].PWidth=3;S->Srs[i].PHeight=3;S->Srs[i].PStyle=1;S->Srs[i].POn=true;
+    // Кромка
+    S->Srs[i].BWidth=1;S->Srs[i].BCol=(TColor)0;S->Srs[i].BOn=true;
+  }
+}
+//---------------------------------------------------------------------
+void TFChartDlg::SetChart(SStpChart *S,bool set)
+{
+  TChart *C=FMain->Chart;
+  if(!set)
+  {
+    // Шкала
+    S->XMin=C->BottomAxis->Minimum;S->XMax=C->BottomAxis->Maximum;
+    S->YMin=C->LeftAxis->Minimum;  S->YMax=C->LeftAxis->Maximum;
+    S->AXMin=C->BottomAxis->AutomaticMinimum;S->AXMax=C->BottomAxis->AutomaticMaximum;
+    S->AYMin=C->LeftAxis->AutomaticMinimum;  S->AYMax=C->LeftAxis->AutomaticMaximum;
+    S->YDiv=C->LeftAxis->Increment;
+
+    // Легенда
+    S->LOn=C->Legend->Visible;
+    S->LPos=C->Legend->Alignment;
+    S->LTop=C->Legend->TopPos;
+    S->LWidth=C->Legend->ColorWidth;
+    S->LLines=C->Legend->DividingLines->Visible;
+    for(int i=0;i<32;i++)
+    {
+      // Канал
+      S->Srs[i].ChOn=LSrs[i]->Active;
+      // Линия
+      S->Srs[i].LCol=LSrs[i]->SeriesColor;
+      S->Srs[i].LWidth=LSrs[i]->LinePen->Width;
+      S->Srs[i].LStyle=LSrs[i]->LinePen->Style;
+      S->Srs[i].LOn=LSrs[i]->LinePen->Visible;
+      // Маркер
+      S->Srs[i].PCol=LSrs[i]->Pointer->Brush->Color;
+      S->Srs[i].PWidth=LSrs[i]->Pointer->HorizSize;
+      S->Srs[i].PHeight=LSrs[i]->Pointer->VertSize;
+      S->Srs[i].PStyle=LSrs[i]->Pointer->Style;
+      S->Srs[i].POn=LSrs[i]->Pointer->Visible;
+      // Кромка
+      S->Srs[i].BWidth=LSrs[i]->Pointer->Pen->Width;
+      S->Srs[i].BCol=LSrs[i]->Pointer->Pen->Color;
+      S->Srs[i].BOn=LSrs[i]->Pointer->Pen->Visible;
+    }
+  }
+  if(set)
+  {
+    // Шкала
+    if(Stp.XType==0) FMain->Chart->BottomAxis->Title->Caption="Номер измерения";
+    if(Stp.XType==1)
+    {
+      FMain->Chart->BottomAxis->Title->Caption="Время";
+    }
+    if(Stp.YType==0) FMain->Chart->LeftAxis->Title->Caption="Напряжение, МПа";
+    if(Stp.YType==1) FMain->Chart->LeftAxis->Title->Caption="Деформация, мкм/м";
+
+    C->BottomAxis->SetMinMax(S->XMin,S->XMax);C->LeftAxis->SetMinMax(S->YMin,S->YMax);
+    C->BottomAxis->AutomaticMinimum=S->AXMin; C->BottomAxis->AutomaticMaximum=S->AXMax;
+    C->LeftAxis->AutomaticMinimum=S->AYMin;   C->LeftAxis->AutomaticMaximum=S->AYMax;
+
+    if(Stp.XType==0) C->BottomAxis->Increment=S->XDiv;
+    if(Stp.XType==1) C->BottomAxis->Increment=0.0;
+    C->LeftAxis->Increment=S->YDiv;
+
+    // Легенда
+    C->Legend->Visible=S->LOn;
+    C->Legend->Alignment=(TLegendAlignment)S->LPos;
+    C->Legend->TopPos=S->LTop;
+    C->Legend->ColorWidth=S->LWidth;
+    C->Legend->DividingLines->Visible=S->LLines;
+    for(int i=0;i<32;i++)
+    {
+      // Канал
+      LSrs[i]->Active=S->Srs[i].ChOn;
+      // Линия
+      LSrs[i]->SeriesColor=S->Srs[i].LCol;
+      LSrs[i]->LinePen->Width=S->Srs[i].LWidth;
+      LSrs[i]->LinePen->Style=(TPenStyle)S->Srs[i].LStyle;
+      LSrs[i]->LinePen->Visible=S->Srs[i].LOn;
+      // Маркер
+      LSrs[i]->Pointer->Brush->Color=S->Srs[i].PCol;
+      LSrs[i]->Pointer->HorizSize=S->Srs[i].PWidth;
+      LSrs[i]->Pointer->VertSize=S->Srs[i].PHeight;
+      LSrs[i]->Pointer->Style=(TSeriesPointerStyle)S->Srs[i].PStyle;
+      LSrs[i]->Pointer->Visible=S->Srs[i].POn;
+      // Кромка
+      LSrs[i]->Pointer->Pen->Width=S->Srs[i].BWidth;
+      LSrs[i]->Pointer->Pen->Color=S->Srs[i].BCol;
+      LSrs[i]->Pointer->Pen->Visible=S->Srs[i].BOn;
+    }
+    FMain->PointCount();
+  }
+}
+//---------------------------------------------------------------------
+void __fastcall TFChartDlg::FormActivate(TObject *Sender)
+{
+  CBXType->ItemIndex=Stp.XType;
+  CBYType->ItemIndex=Stp.YType;
+  CBXTypeChange(NULL);
+  CBTFmt->ItemIndex=StpChart.TFmt;
+  // Шкала
+  AnsiString s;TChart *C=FMain->Chart;
+
+  if(Stp.XType==0)
+  {
+    EXMin->Text=s.FloatToStrF(C->BottomAxis->Minimum,s.sffFixed,16,0);
+    EXMax->Text=s.FloatToStrF(C->BottomAxis->Maximum,s.sffFixed,16,0);
+  }
+  EXDiv->Text=s.FloatToStrF(StpChart.XDiv,s.sffFixed,16,1);
+  if(Stp.XType==0) CBXDiv->Checked=(C->BottomAxis->Increment==0.0);
+  if(Stp.XType==1)
+  {
+    DXMin->DateTime=C->BottomAxis->Minimum;TXMin->DateTime=C->BottomAxis->Minimum;
+    DXMax->DateTime=C->BottomAxis->Maximum;TXMax->DateTime=C->BottomAxis->Maximum;
+    if(double(DXMin->DateTime)<MinTime) { DXMin->DateTime=MinTime;TXMin->DateTime=MinTime;}
+    if(double(DXMax->DateTime)<MinTime) { DXMax->DateTime=MinTime;TXMax->DateTime=MinTime;}
+  }
+  CBXMin->Checked=C->BottomAxis->AutomaticMinimum;
+  CBXMax->Checked=C->BottomAxis->AutomaticMaximum;
+  EYMin->Text=s.FloatToStrF(C->LeftAxis->Minimum,s.sffFixed,16,1);
+  EYMax->Text=s.FloatToStrF(C->LeftAxis->Maximum,s.sffFixed,16,1);
+  CBYMin->Checked=C->LeftAxis->AutomaticMinimum;
+  CBYMax->Checked=C->LeftAxis->AutomaticMaximum;
+  EYDiv->Text=s.FloatToStrF(C->LeftAxis->Increment,s.sffFixed,16,1);
+  CBYDiv->Checked=(C->LeftAxis->Increment==0.0);
+  // Легенда
+  CBLOn->Checked=C->Legend->Visible;
+  CBLPos->ItemIndex=C->Legend->Alignment;
+  UDLTop->Position=C->Legend->TopPos;
+  UDLWidth->Position=C->Legend->ColorWidth;
+  CBLLines->Checked=C->Legend->DividingLines->Visible;
+  // Канал
+  CBCh1->ItemIndex=LineSeriesSel;
+  CBCh2->ItemIndex=LineSeriesSel;
+  // Линия, маркер
+  CBCh1Change(NULL);CBCh2Change(NULL);
+}
+//---------------------------------------------------------------------------
+void __fastcall TFChartDlg::CBCh1Change(TObject *Sender)
+{
+  // Канал
+  LineSeriesSel=CBCh1->ItemIndex;CBCh2->ItemIndex=LineSeriesSel;
+  CBChOn1->Checked=LSrs[LineSeriesSel=CBCh1->ItemIndex]->Active;
+  CBChOn2->Checked=CBChOn1->Checked;
+  // Линия
+  CBLCol->Selected=LSrs[LineSeriesSel]->SeriesColor;
+  UpLWidth->Position=LSrs[LineSeriesSel]->LinePen->Width;
+  CBLStyle->ItemIndex=LSrs[LineSeriesSel]->LinePen->Style;
+  CBLStyle->Enabled=(UpLWidth->Position==1);
+  CBPOn->Checked=LSrs[LineSeriesSel]->LinePen->Visible;
+}
+void __fastcall TFChartDlg::CBCh2Change(TObject *Sender)
+{
+  // Канал
+  LineSeriesSel=CBCh2->ItemIndex;CBCh1->ItemIndex=LineSeriesSel;
+  CBChOn2->Checked=LSrs[LineSeriesSel=CBCh1->ItemIndex]->Active;
+  CBChOn1->Checked=CBChOn2->Checked;
+  // Маркер
+  CBPCol->Selected=LSrs[LineSeriesSel]->Pointer->Brush->Color;
+  UDPWidth->Position=LSrs[LineSeriesSel]->Pointer->HorizSize;
+  UDPHeight->Position=LSrs[LineSeriesSel]->Pointer->VertSize;
+  CBPStyle->ItemIndex=LSrs[LineSeriesSel]->Pointer->Style;
+  CBPtOn->Checked=LSrs[LineSeriesSel]->Pointer->Visible;
+  // Кромка
+  UDBWidth->Position=LSrs[LineSeriesSel]->Pointer->Pen->Width;
+  CBBCol->Selected=LSrs[LineSeriesSel]->Pointer->Pen->Color;
+  CBBOn->Checked=LSrs[LineSeriesSel]->Pointer->Pen->Visible;
+}
+//---------------------------------------------------------------------------
+void __fastcall TFChartDlg::CBLColChange(TObject *Sender)
+{
+  extern TColor MaskColor,ColorChange;
+  if(CBLCol->Selected==MaskColor) CBLCol->Selected=ColorChange;
+  LSrs[LineSeriesSel]->SeriesColor=CBLCol->Selected;
+  for(int i=0;i<LSrs[LineSeriesSel]->Count();i++) // Ok clNone
+  {
+    TColor col=CBLCol->Selected;
+    if(LSrs[LineSeriesSel]->ValueColor[i]!=MaskColor) LSrs[LineSeriesSel]->ValueColor[i]=col;
+  }
+}
+//---------------------------------------------------------------------------
+void __fastcall TFChartDlg::CBLStyleChange(TObject *Sender)
+{
+  LSrs[LineSeriesSel]->LinePen->Style=(TPenStyle)CBLStyle->ItemIndex;
+}
+//---------------------------------------------------------------------------
+void __fastcall TFChartDlg::UpLWidthClick(TObject *Sender,
+      TUDBtnType Button)
+{
+  LSrs[LineSeriesSel]->LinePen->Width=UpLWidth->Position;
+  CBLStyle->Enabled=(UpLWidth->Position==1);
+}
+//---------------------------------------------------------------------------
+void __fastcall TFChartDlg::CBPOnClick(TObject *Sender)
+{
+  LSrs[LineSeriesSel]->LinePen->Visible=CBPOn->Checked;
+}
+//---------------------------------------------------------------------------
+void __fastcall TFChartDlg::CBPColChange(TObject *Sender)
+{
+  LSrs[LineSeriesSel]->Pointer->Brush->Color=CBPCol->Selected;
+}
+//---------------------------------------------------------------------------
+void __fastcall TFChartDlg::UDPWidthClick(TObject *Sender,
+      TUDBtnType Button)
+{
+  LSrs[LineSeriesSel]->Pointer->HorizSize=UDPWidth->Position;
+}
+//---------------------------------------------------------------------------
+void __fastcall TFChartDlg::UDPHeightClick(TObject *Sender,
+      TUDBtnType Button)
+{
+  LSrs[LineSeriesSel]->Pointer->VertSize=UDPHeight->Position;
+}
+//---------------------------------------------------------------------------
+void __fastcall TFChartDlg::CBPStyleChange(TObject *Sender)
+{
+  LSrs[LineSeriesSel]->Pointer->Style=(TSeriesPointerStyle)CBPStyle->ItemIndex;
+}
+//---------------------------------------------------------------------------
+void __fastcall TFChartDlg::CBPtOnClick(TObject *Sender)
+{
+  LSrs[LineSeriesSel]->Pointer->Visible=CBPtOn->Checked;
+}
+//---------------------------------------------------------------------------
+void __fastcall TFChartDlg::UDBWidthClick(TObject *Sender,
+      TUDBtnType Button)
+{
+  LSrs[LineSeriesSel]->Pointer->Pen->Width=UDBWidth->Position;
+}
+//---------------------------------------------------------------------------
+void __fastcall TFChartDlg::CBBColChange(TObject *Sender)
+{
+  LSrs[LineSeriesSel]->Pointer->Pen->Color=CBBCol->Selected;
+}
+//---------------------------------------------------------------------------
+void __fastcall TFChartDlg::CBBOnClick(TObject *Sender)
+{
+  LSrs[LineSeriesSel]->Pointer->Pen->Visible=CBBOn->Checked;
+}
+//---------------------------------------------------------------------------
+void __fastcall TFChartDlg::CBChOn1Click(TObject *Sender)
+{
+  if(LSrs[CBCh1->ItemIndex]->Active!=CBChOn1->Checked)
+  {
+    LSrs[CBCh1->ItemIndex]->Active=CBChOn1->Checked;FMain->PointCount();
+    FMain->DrawGrid->Repaint();
+  }
+  CBChOn2->Checked=CBChOn1->Checked;
+}
+void __fastcall TFChartDlg::CBChOn2Click(TObject *Sender)
+{
+  if(LSrs[CBCh2->ItemIndex]->Active!=CBChOn2->Checked)
+  {
+    LSrs[CBCh2->ItemIndex]->Active=CBChOn2->Checked;FMain->PointCount();
+    FMain->DrawGrid->Repaint();
+  }
+  CBChOn1->Checked=CBChOn2->Checked;
+}
+//---------------------------------------------------------------------------
+void __fastcall TFChartDlg::OKBtnClick(TObject *Sender)
+{
+  TChart *C=FMain->Chart;
+  StpChart.TFmt=CBTFmt->ItemIndex;
+  // Шкала
+  if(CBXType->ItemIndex==0)
+  {
+    try { C->BottomAxis->Minimum=EXMin->Text.ToDouble();} catch (...) {}
+    try { C->BottomAxis->Maximum=EXMax->Text.ToDouble();} catch (...) {}
+    if(CBXDiv->Checked) C->BottomAxis->Increment=0.0;
+    else { try { C->BottomAxis->Increment=StpChart.XDiv=EXDiv->Text.ToDouble();} catch (...) {}}
+  }
+  if(CBXType->ItemIndex==1)
+  {
+    try { C->BottomAxis->Minimum=int(DXMin->DateTime)+TXMin->DateTime-int(TXMin->DateTime);} catch (...) {}
+    try { C->BottomAxis->Maximum=int(DXMax->DateTime)+TXMax->DateTime-int(TXMax->DateTime);} catch (...) {}
+    C->BottomAxis->Increment=0.0;
+  }
+  try { C->LeftAxis->Minimum=EYMin->Text.ToDouble();}   catch (...) {}
+  try { C->LeftAxis->Maximum=EYMax->Text.ToDouble();}   catch (...) {}
+  C->BottomAxis->AutomaticMinimum=CBXMin->Checked;
+  C->BottomAxis->AutomaticMaximum=CBXMax->Checked;
+  C->LeftAxis->AutomaticMinimum=CBYMin->Checked;
+  C->LeftAxis->AutomaticMaximum=CBYMax->Checked;
+
+  if(CBYDiv->Checked) C->LeftAxis->Increment=0.0;
+  else { try { C->LeftAxis->Increment=EYDiv->Text.ToDouble();} catch (...) {}}
+
+  if(Stp.YType!=CBYType->ItemIndex)
+  {
+    Stp.YType=CBYType->ItemIndex;
+    if(Stp.YType==0) FMain->Chart->LeftAxis->Title->Caption="Напряжение, МПа";
+    if(Stp.YType==1) FMain->Chart->LeftAxis->Title->Caption="Деформация, мкм/м";
+    for(int i=0;i<32;i++)
+    {
+      int n=LSrs[i]->Count(); // Ok 0.5
+      for(int k=0;k<n;k++)
+      {
+        if(Stp.YType==0) LSrs[i]->YValues->Value[k]=LSrs[i]->YValues->Value[k]*Stp.Ch[i].E/1000.0;
+        if(Stp.YType==1) LSrs[i]->YValues->Value[k]=LSrs[i]->YValues->Value[k]/Stp.Ch[i].E*1000.0;
+      }
+    }
+    FMain->UpdateListRes(&Stp);
+  }
+  if(Stp.XType!=CBXType->ItemIndex)
+  {
+    Stp.XType=CBXType->ItemIndex;
+    if(Stp.XType==0) FMain->Chart->BottomAxis->Title->Caption="Номер измерения";
+    if(Stp.XType==1) FMain->Chart->BottomAxis->Title->Caption="Время";
+    for(int i=0;i<32;i++)
+    {
+      int n=LSrs[i]->Count();
+      for(int k=0;k<n;k++)
+      {
+        if(Stp.XType==0)
+        {
+          double d=LSrs[i]->XValues->Value[k];
+          int ix=FMain->FindIX(FMain->LSTime->XValues,d);
+          LSrs[i]->XValues->Value[k]=double(ix+1);
+        }
+        if(Stp.XType==1)
+        {
+          int x=(int)LSrs[i]->XValues->Value[k];
+          LSrs[i]->XValues->Value[k]=FMain->LSTime->XValues->Value[x-1];
+        }
+      }
+      if(Stp.XType==0) LSrs[i]->XValues->DateTime=false;
+      if(Stp.XType==1)
+      {
+        FMain->Chart->BottomAxis->DateTimeFormat="hh:mm:ss";LSrs[i]->XValues->DateTime=true;
+      }
+    }
+    FMain->UpdateListRes(&Stp);
+  }
+}
+//---------------------------------------------------------------------------
+void __fastcall TFChartDlg::EXMinChange(TObject *Sender)
+{
+  FChartDlg->CBXMin->Checked=false;
+}
+//---------------------------------------------------------------------------
+void __fastcall TFChartDlg::EXMaxChange(TObject *Sender)
+{
+  FChartDlg->CBXMax->Checked=false;
+}
+//---------------------------------------------------------------------------
+void __fastcall TFChartDlg::EYMinChange(TObject *Sender)
+{
+  FChartDlg->CBYMin->Checked=false;
+}
+//---------------------------------------------------------------------------
+void __fastcall TFChartDlg::EYMaxChange(TObject *Sender)
+{
+  FChartDlg->CBYMax->Checked=false;
+}
+//---------------------------------------------------------------------------
+void __fastcall TFChartDlg::EXDivChange(TObject *Sender)
+{
+  FChartDlg->CBXDiv->Checked=false;
+}
+//---------------------------------------------------------------------------
+void __fastcall TFChartDlg::EYDivChange(TObject *Sender)
+{
+  FChartDlg->CBYDiv->Checked=false;
+}
+//---------------------------------------------------------------------------
+//---------------------------------------------------------------------------
+//---------------------------------------------------------------------------
+void __fastcall TFChartDlg::CBLPosChange(TObject *Sender)
+{
+  TChart *C=FMain->Chart;
+  C->Legend->Alignment= (TLegendAlignment)CBLPos->ItemIndex;
+}
+//---------------------------------------------------------------------------
+void __fastcall TFChartDlg::UDLTopClick(TObject *Sender, TUDBtnType Button)
+{
+  TChart *C=FMain->Chart;
+  C->Legend->TopPos=UDLTop->Position;
+}
+//---------------------------------------------------------------------------
+void __fastcall TFChartDlg::UDLWidthClick(TObject *Sender,
+      TUDBtnType Button)
+{
+  TChart *C=FMain->Chart;
+  C->Legend->ColorWidth=UDLWidth->Position;
+}
+//---------------------------------------------------------------------------
+void __fastcall TFChartDlg::CBLLinesClick(TObject *Sender)
+{
+  TChart *C=FMain->Chart;
+  C->Legend->DividingLines->Visible=CBLLines->Checked;
+}
+//---------------------------------------------------------------------------
+void __fastcall TFChartDlg::CBFormatChange(TObject *Sender)
+{
+  FMain->DrawGrid->Repaint();
+  //FMain->UpdateListRes(&Stp);
+}
+//---------------------------------------------------------------------------
+void __fastcall TFChartDlg::CBCWidthChange(TObject *Sender)
+{
+
+  if(FChartDlg->CBCWidth->ItemIndex==0) FMain->DrawGrid->DefaultColWidth=48; //  75
+  if(FChartDlg->CBCWidth->ItemIndex==1) FMain->DrawGrid->DefaultColWidth=64; // 100
+  if(FChartDlg->CBCWidth->ItemIndex==2) FMain->DrawGrid->DefaultColWidth=80; // 125
+  if(FChartDlg->CBCWidth->ItemIndex==3) FMain->DrawGrid->DefaultColWidth=96; // 150
+  if(FChartDlg->CBCWidth->ItemIndex==4) FMain->DrawGrid->DefaultColWidth=112;// 175
+  if(FChartDlg->CBCWidth->ItemIndex==5) FMain->DrawGrid->DefaultColWidth=128;// 200
+  if(FChartDlg->CBCWidth->ItemIndex==6) FMain->DrawGrid->DefaultColWidth=192;// 300
+  if(FChartDlg->CBCWidth->ItemIndex==7) FMain->DrawGrid->DefaultColWidth=256;// 400
+
+  FMain->DrawGrid->ColWidths[0]=78;
+  FMain->DrawGrid->ColWidths[1]=60;
+  FMain->DrawGrid->ColWidths[2]=60;
+}
+//---------------------------------------------------------------------------
+void __fastcall TFChartDlg::CBLOnClick(TObject *Sender)
+{
+  TChart *C=FMain->Chart;
+  C->Legend->Visible=CBLOn->Checked;
+}
+//---------------------------------------------------------------------------
+void __fastcall TFChartDlg::CBXTypeChange(TObject *Sender)
+{
+  if(CBXType->ItemIndex==0)
+  {
+    DXMin->Visible=false;DXMax->Visible=false;
+    TXMin->Visible=false;TXMax->Visible=false;CBXDiv->Visible=true;
+    EXMin->Visible=true;EXMax->Visible=true;EXDiv->Visible=true;
+    LTFmt->Visible=false;CBTFmt->Visible=false;
+  }
+  if(CBXType->ItemIndex==1)
+  {
+    DXMin->Visible=true;DXMax->Visible=true;
+    TXMin->Visible=true;TXMax->Visible=true;CBXDiv->Visible=false;
+    EXMin->Visible=false;EXMax->Visible=false;EXDiv->Visible=false;
+    LTFmt->Visible=true;CBTFmt->Visible=true;
+  }
+  if(Sender!=NULL)
+  {
+    AnsiString s;int n=FMain->LSTime->Count();
+    if(CBXType->ItemIndex==0)
+    {
+      if(n==0)
+      {
+        EXMin->Text=s.FloatToStrF(0,s.sffFixed,16,0);
+        EXMax->Text=s.FloatToStrF(0,s.sffFixed,16,0);
+      }
+      else
+      {
+        EXMin->Text=s.FloatToStrF(1,s.sffFixed,16,0);
+        EXMax->Text=s.FloatToStrF(n,s.sffFixed,16,0);
+      }
+    }
+    if(CBXType->ItemIndex==1)
+    {
+      if(n==0)
+      {
+        DXMin->DateTime=MinTime;TXMin->DateTime=MinTime;
+        DXMax->DateTime=MinTime;TXMax->DateTime=MinTime;
+      }
+      else
+      {
+        //DXMin->DateTime=FMain->LSTime->YValues->Value[0];  TXMin->DateTime=FMain->LSTime->YValues->Value[0];
+        DXMin->DateTime=FMain->LSTime->XValues->Value[0];  TXMin->DateTime=FMain->LSTime->XValues->Value[0];
+        //DXMax->DateTime=FMain->LSTime->YValues->Value[n-1];TXMax->DateTime=FMain->LSTime->YValues->Value[n-1];
+        DXMax->DateTime=FMain->LSTime->XValues->Value[n-1];TXMax->DateTime=FMain->LSTime->XValues->Value[n-1];
+      }
+    }
+    CBXMin->Checked=true;
+    CBXMax->Checked=true;
+  }
+}
+//---------------------------------------------------------------------------
+void __fastcall TFChartDlg::DXMinChange(TObject *Sender)
+{
+  FChartDlg->CBXMin->Checked=false;
+}
+//---------------------------------------------------------------------------
+void __fastcall TFChartDlg::TXMinChange(TObject *Sender)
+{
+  FChartDlg->CBXMin->Checked=false;
+}
+//---------------------------------------------------------------------------
+void __fastcall TFChartDlg::DXMaxChange(TObject *Sender)
+{
+  FChartDlg->CBXMax->Checked=false;
+}
+//---------------------------------------------------------------------------
+void __fastcall TFChartDlg::TXMaxChange(TObject *Sender)
+{
+  FChartDlg->CBXMax->Checked=false;
+}
+//---------------------------------------------------------------------------
+void __fastcall TFChartDlg::TXDivChange(TObject *Sender)
+{
+  FChartDlg->CBXDiv->Checked=false;
+}
+//---------------------------------------------------------------------------
+void __fastcall TFChartDlg::CBTFmtChange(TObject *Sender)
+{
+  StpChart.TFmt=CBTFmt->ItemIndex;
+  FMain->Chart->BottomAxis->DateTimeFormat=CBTFmt->Text;
+}
+//---------------------------------------------------------------------------
+void __fastcall TFChartDlg::FormCreate(TObject *Sender)
+{
+  FMain->Chart->BottomAxis->DateTimeFormat=CBTFmt->Items->Strings[StpChart.TFmt];
+}
+//---------------------------------------------------------------------------
+
+
+
+

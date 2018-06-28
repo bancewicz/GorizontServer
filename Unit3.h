@@ -1,0 +1,30 @@
+//---------------------------------------------------------------------------
+
+#ifndef Unit3H
+#define Unit3H
+//---------------------------------------------------------------------------
+#include <Classes.hpp>
+#include <Controls.hpp>
+#include <StdCtrls.hpp>
+#include <Forms.hpp>
+#include <ComCtrls.hpp>
+#include <ExtCtrls.hpp>
+//---------------------------------------------------------------------------
+class TTOPCInstallForm : public TForm
+{
+__published:	// IDE-managed Components
+        TProgressBar *ProgressBar1;
+        TTimer *Timer1;
+        TMemo *Memo1;
+        void __fastcall FormCreate(TObject *Sender);
+        void __fastcall Timer1Timer(TObject *Sender);
+private:	// User declarations
+public:		// User declarations
+        __fastcall TTOPCInstallForm(TComponent* Owner);
+
+        void Timer1Start(void);        
+};
+//---------------------------------------------------------------------------
+extern PACKAGE TTOPCInstallForm *TOPCInstallForm;
+//---------------------------------------------------------------------------
+#endif
